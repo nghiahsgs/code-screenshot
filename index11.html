@@ -96,30 +96,39 @@ function updateCodeBlock() {
     codeBlock.textContent = codeInput;
     Prism.highlightAll();
 }
-
-function downloadSnapshot() {
-    html2canvas(document.getElementById('code-container'), { logging: true, useCORS: true }).then(function(canvas) {
-        console.log('Canvas:', canvas);
-        var dataURL = canvas.toDataURL('image/png');
-        console.log('Data URL:', dataURL);
-
-        if (dataURL === 'data:,') {
-            console.error('Data URL is empty. Canvas might be empty or not properly rendered.');
+window.onload = function() {
+    function downloadSnapshot() {
+        var container = document.getElementById('code-container');
+        if(container.offsetWidth === 0 && container.offsetHeight === 0) {
+            console.error('The container has zero dimensions.');
             return;
         }
+        
+        html2canvas(container, { logging: true, useCORS: true }).then(function(canvas) {
+            if (!canvas) {
+                console.error('Failed to create a canvas element.');
+                return;
+            }
+            
+            var dataURL = canvas.toDataURL('image/png');
+            if (dataURL === 'data:,') {
+                console.error('Data URL is empty. Canvas might be empty or not properly rendered.');
+                return;
+            }
 
-        var link = document.createElement('a');
-        link.href = dataURL;
-        link.download = 'code-snapshot.png';
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-    }).catch(function(error) {
-        console.error('html2canvas error:', error);
-    });
-}
+            var link = document.createElement('a');
+            link.href = dataURL;
+            link.download = 'code-snapshot.png';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }).catch(function(error) {
+            console.error('html2canvas error:', error);
+        });
+    }
 
-
+    // Other code to initialize your page...
+};
 
 
 
