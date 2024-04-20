@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Code Snapshot</title>
+<!-- Include PrismJS for syntax highlighting -->
+<link href="https://cdn.jsdelivr.net/npm/prismjs@1.23.0/prism.css" rel="stylesheet"/>
+<script src="https://cdn.jsdelivr.net/npm/prismjs@1.23.0/prism.js"></script>
+<!-- Include html2canvas -->
+<script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+<style>
+    /* Basic styling */
+    body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 20px;
+        background-color: #f7f7f7;
+    }
+    #code-container {
+        background-color: #2e3440;
+        color: #d8dee9;
+        padding: 20px;
+        border-radius: 8px;
+        margin-bottom: 20px;
+    }
+    button {
+        padding: 10px 20px;
+        font-size: 16px;
+        cursor: pointer;
+    }
+</style>
+</head>
+<body>
+
+<!-- Container to hold the code -->
+<div id="code-container">
+<pre><code class="language-html">Your code goes here...</code></pre>
+</div>
+
+<!-- Button to trigger the snapshot -->
+<button onclick="takeSnapshot()">Create Snapshot</button>
+
+<script>
+function takeSnapshot() {
+    // Use html2canvas to take a snapshot of the div with the code
+    html2canvas(document.getElementById('code-container')).then(function(canvas) {
+        // Create an image element
+        var img = document.createElement('img');
+        img.src = canvas.toDataURL();
+        // Append the image to the body
+        document.body.appendChild(img);
+    });
+}
+</script>
+</body>
+</html>
