@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Code to Image Generator</title>
+<script src="https://cdn.jsdelivr.net/npm/monaco-editor@latest/min/vs/loader.js"></script>
+<script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+<style>
+  #editor {
+    width: 80%;
+    height: 500px;
+    border-radius: 4px;
+    margin: 20px auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    font-family: 'Fira Code', monospace;
+  }
+  button {
+    display: block;
+    margin: 0 auto;
+    padding: 10px 20px;
+    font-size: 18px;
+    cursor: pointer;
+  }
+</style>
+</head>
+<body>
+
+<div id="editor"></div>
+<button onclick="generateImage()">Generate Image</button>
+
+<script>
+  require.config({ paths: { 'vs': 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.20.0/min/vs' }});
+
+  require(['vs/editor/editor.main'], function() {
+    var editor = monaco.editor.create(document.getElementById('editor'), {
+      language: 'javascript', // set the default language here
+      theme: 'vs-dark', // set the default theme here
+      value: [
+        'function x() {',
+        '\tconsole.log("Hello world!");',
+        '}'
+      ].join('\n'), // sample code
+    });
+
+    window.generateImage = function() {
+      html2canvas(document.getElementById('editor')).then(canvas => {
+        // You can create an image preview or download the image
+        const imagePreview = document.createElement('img');
+        imagePreview.src = canvas.toDataURL("image/png");
+        document.body.appendChild(imagePreview); // Adds the canvas to the document for preview
+
+        // Download the image
+        const image = canvas.toDataURL("image/png").replace("image/png", "image/octet-stream");
+        const link = document.createElement('a');
+        link.download = 'my-code.png';
+        link.href = image;
+        link.click();
+
+        // Optional: remove the preview or hide it
+        // imagePreview.style.display = 'none';
+        // Or document.body.removeChild(imagePreview);
+      });
+    };
+  });
+</script>
+
+</body>
+</html>
