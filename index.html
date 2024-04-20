@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Code to Image Generator</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.7.2/styles/default.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.7.2/highlight.min.js"></script>
+    <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+    <style>
+        #code-container {
+            width: 80%;
+            margin: 20px auto;
+            padding: 20px;
+            background: #f4f4f4; /* Light grey background */
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        pre code {
+            display: block;
+            white-space: pre-wrap;
+            background: transparent;
+        }
+    </style>
+</head>
+<body>
+
+<div id="code-container">
+    <pre><code id="code-block">/* Paste your code here */</code></pre>
+</div>
+
+<textarea id="code-input" placeholder="Paste your code here..."></textarea>
+<button onclick="generateImage()">Generate Image</button>
+
+<script>
+    hljs.highlightAll();
+
+    document.getElementById('code-input').addEventListener('input', function(e) {
+        const codeBlock = document.getElementById('code-block');
+        codeBlock.textContent = e.target.value;
+        hljs.highlightBlock(codeBlock);
+    });
+
+    function generateImage() {
+        html2canvas(document.querySelector("#code-container")).then(canvas => {
+            // Here you can create an image preview or download the image
+            document.body.appendChild(canvas); // To add the canvas to the document
+            // To download the image
+            const image = canvas.toDataURL("image/png").replace("image/png", "image/octet-stream");
+            const link = document.createElement('a');
+            link.download = 'my-code.png';
+            link.href = image;
+            link.click();
+        });
+    }
+</script>
+
+</body>
+</html>
