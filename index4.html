@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Code to Image Generator</title>
+<!-- Load Monaco Editor -->
+<script src="https://cdn.jsdelivr.net/npm/monaco-editor@latest/min/vs/loader.js"></script>
+<!-- Load html2canvas -->
+<script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+<style>
+  body {
+    margin: 0;
+    padding: 0;
+    background-color: #1e1e1e; /* This is a dark background color */
+    color: #dcdcdc;
+    font-family: 'Consolas', 'Monaco', monospace;
+  }
+  #editor {
+    border-radius: 8px;
+    margin: 5% auto;
+    padding: 2%;
+    width: 90%;
+    height: 500px; /* Fixed height */
+    background: #282c34; /* Editor background */
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.5); /* Box shadow for depth */
+    position: relative; /* For positioning the generate button */
+  }
+  button {
+    position: absolute;
+    right: 2%;
+    bottom: -50px;
+    padding: 10px 20px;
+    font-size: 16px;
+    border: none;
+    border-radius: 4px;
+    background-color: #61afef;
+    color: white;
+    cursor: pointer;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.5);
+  }
+</style>
+</head>
+<body>
+
+<div id="editor"></div>
+<button onclick="generateImage()">Generate Image</button>
+
+<script>
+  require.config({ paths: { 'vs': 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.20.0/min/vs' }});
+
+  let editor;
+
+  require(['vs/editor/editor.main'], function() {
+    editor = monaco.editor.create(document.getElementById('editor'), {
+      value: "// Type your code here",
+      language: 'javascript',
+      theme: 'vs-dark',
+      lineNumbers: 'on',
+      roundedSelection: false,
+      scrollBeyondLastLine: false,
+      readOnly: false,
+      fontSize: 16,
+      automaticLayout: true
+    });
+  });
+
+  function generateImage() {
+    html2canvas(document.getElementById('editor')).then(canvas => {
+      const link = document.createElement('a');
+      link.download = 'code-snapshot.png';
+      link.href = canvas.toDataURL();
+      link.click();
+    }).catch(err => {
+      console.error('An error occurred during image generation', err);
+    });
+  }
+</script>
+
+</body>
+</html>

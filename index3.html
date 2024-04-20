@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Code to Image Generator</title>
+<!-- Load Monaco Editor -->
+<script src="https://cdn.jsdelivr.net/npm/monaco-editor@latest/min/vs/loader.js"></script>
+<!-- Load html2canvas -->
+<script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+<style>
+  body {
+    margin: 0;
+    padding: 0;
+    background-color: #282a36; /* This is a dark background color */
+    color: #f8f8f2;
+    font-family: 'Fira Code', monospace;
+  }
+  #editor {
+    border-radius: 4px;
+    margin: 50px auto;
+    padding: 20px;
+    width: 60%;
+    height: 500px;
+    background: #282a36; /* Editor background */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5); /* Box shadow for depth */
+  }
+  /* Additional styles can be added here */
+</style>
+</head>
+<body>
+
+<div id="editor"></div>
+
+<script>
+  require.config({ paths: { 'vs': 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.20.0/min/vs' }});
+
+  require(['vs/editor/editor.main'], function() {
+    var editor = monaco.editor.create(document.getElementById('editor'), {
+      value: "// Type your code here",
+      language: 'javascript',
+      theme: 'vs-dark',
+      automaticLayout: true
+    });
+
+    window.generateImage = function() {
+      // Same function as before to generate image from editor content
+    };
+
+    // You can add more JavaScript here to handle additional functionality
+  });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Code to Image Generator</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.7.2/styles/atom-one-dark.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/marked/2.0.0/marked.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.7.2/highlight.min.js"></script>
+<script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+<style>
+  /* ... your existing styles ... */
+</style>
+</head>
+<body>
+
+<textarea id="code-input" placeholder="Paste your Markdown code here..."></textarea>
+<button onclick="generateImage()">Generate Image</button>
+<div id="code-container">
+    <pre><code id="code-block"></code></pre>
+</div>
+
+<script>
+  document.getElementById('code-input').addEventListener('input', function(e) {
+    const codeBlock = document.getElementById('code-block');
+    // Use marked.js to parse Markdown and highlight.js to highlight the code
+    codeBlock.innerHTML = marked(e.target.value, {
+      highlight: function(code, lang) {
+        const language = hljs.getLanguage(lang) ? lang : 'plaintext';
+        return hljs.highlight(code, { language }).value;
+      }
+    });
+  });
+
+  function generateImage() {
+    // ... your existing generateImage function ...
+  }
+
+  // Initialize highlight.js
+  hljs.highlightAll();
+  // Initialize marked.js
+  marked.setOptions({
+    renderer: new marked.Renderer(),
+    highlight: function(code, lang) {
+      const language = hljs.getLanguage(lang) ? lang : 'plaintext';
+      return hljs.highlight(code, { language }).value;
+    },
+    langPrefix: 'hljs language-', // Use 'language-' because that's what highlight.js prefers.
+    pedantic: false,
+    gfm: true,
+    breaks: false,
+    sanitize: false,
+    smartLists: true,
+    smartypants: false,
+    xhtml: false
+  });
+</script>
+
+</body>
+</html>
