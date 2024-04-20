@@ -1,56 +1,84 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Code to Image Generator</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.7.2/styles/default.min.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.7.2/highlight.min.js"></script>
-    <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
-    <style>
-        #code-container {
-            width: 80%;
-            margin: 20px auto;
-            padding: 20px;
-            background: #f4f4f4; /* Light grey background */
-            border: 1px solid #ccc;
-            border-radius: 4px;
-        }
-        pre code {
-            display: block;
-            white-space: pre-wrap;
-            background: transparent;
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Code to Image Generator</title>
+<!-- Thêm stylesheet cho syntax highlighting -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.7.2/styles/atom-one-dark.min.css">
+<!-- Thêm Google Fonts cho mã lập trình -->
+<link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.7.2/highlight.min.js"></script>
+<script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+<style>
+  body {
+    font-family: 'Fira Code', monospace;
+  }
+  #code-container {
+    width: 80%;
+    margin: 40px auto;
+    padding: 40px;
+    background: #2b2b2b; /* Dark background for better contrast */
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2); /* Add shadow for depth */
+    border-radius: 8px;
+    color: #f8f8f2; /* Light text for better readability */
+  }
+  pre code {
+    white-space: pre-wrap;
+    background: transparent;
+  }
+  #code-input {
+    width: calc(80% - 20px);
+    margin: 0 auto 20px;
+    padding: 10px;
+    font-family: 'Fira Code', monospace;
+    font-size: 16px;
+  }
+  button {
+    display: block;
+    margin: 0 auto;
+    padding: 10px 20px;
+    font-size: 18px;
+    cursor: pointer;
+  }
+</style>
 </head>
 <body>
 
-<div id="code-container">
-    <pre><code id="code-block">/* Paste your code here */</code></pre>
-</div>
-
 <textarea id="code-input" placeholder="Paste your code here..."></textarea>
 <button onclick="generateImage()">Generate Image</button>
+<div id="code-container">
+    <pre><code id="code-block">/* Your code will appear here */</code></pre>
+</div>
 
 <script>
-    hljs.highlightAll();
+  hljs.initHighlightingOnLoad();
 
-    document.getElementById('code-input').addEventListener('input', function(e) {
-        const codeBlock = document.getElementById('code-block');
-        codeBlock.textContent = e.target.value;
-        hljs.highlightBlock(codeBlock);
+  document.getElementById('code-input').addEventListener('input', function(e) {
+    const codeBlock = document.getElementById('code-block');
+    codeBlock.textContent = e.target.value;
+    hljs.highlightBlock(codeBlock);
+  });
+
+  function generateImage() {
+    html2canvas(document.querySelector("#code-container")).then(canvas => {
+      // Create an image preview or download the image
+      const imagePreview = document.createElement('img');
+      imagePreview.src = canvas.toDataURL("image/png");
+      document.body.appendChild(imagePreview); // Adds the canvas to the document for preview
+      
+      // Download the image
+      const image = canvas.toDataURL("image/png").replace("image/png", "image/octet-stream");
+      const link = document.createElement('a');
+      link.download = 'my-code.png';
+      link.href = image;
+      link.click();
+      
+      // Optional: remove the preview or hide it
+      // imagePreview.style.display = 'none';
+      // Or document.body.removeChild(imagePreview);
     });
-
-    function generateImage() {
-        html2canvas(document.querySelector("#code-container")).then(canvas => {
-            // Here you can create an image preview or download the image
-            document.body.appendChild(canvas); // To add the canvas to the document
-            // To download the image
-            const image = canvas.toDataURL("image/png").replace("image/png", "image/octet-stream");
-            const link = document.createElement('a');
-            link.download = 'my-code.png';
-            link.href = image;
-            link.click();
-        });
-    }
+  }
 </script>
 
 </body>
