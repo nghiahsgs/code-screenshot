@@ -80,7 +80,7 @@
 <div class="container">
     <label for="code-container">Preview:</label>
     <div id="code-container">
-        <pre><code id="code-block" class="language-javascript">z</code></pre> <!-- default language -->
+        <pre><code id="code-block" class="language-javascript"></code></pre> <!-- default language -->
     </div>
 </div>
 
@@ -138,6 +138,24 @@ function downloadSnapshot() {
     }).catch(function(error) {
         console.error('html2canvas error:', error);
     });
+
+    // html2canvas(document.querySelector("#code-container")).then(canvas => {
+    //   // Create an image preview or download the image
+    //   const imagePreview = document.createElement('img');
+    //   imagePreview.src = canvas.toDataURL("image/png");
+    //   document.body.appendChild(imagePreview); // Adds the canvas to the document for preview
+      
+    //   // Download the image
+    //   const image = canvas.toDataURL("image/png").replace("image/png", "image/octet-stream");
+    //   const link = document.createElement('a');
+    //   link.download = 'my-code.png';
+    //   link.href = image;
+    //   link.click();
+      
+    //   // Optional: remove the preview or hide it
+    //   // imagePreview.style.display = 'none';
+    //   // Or document.body.removeChild(imagePreview);
+    // });
 }
 
 function copyToClipboard() {

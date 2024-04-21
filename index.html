@@ -67,12 +67,12 @@
       imagePreview.src = canvas.toDataURL("image/png");
       document.body.appendChild(imagePreview); // Adds the canvas to the document for preview
       
-      // Download the image
-      const image = canvas.toDataURL("image/png").replace("image/png", "image/octet-stream");
-      const link = document.createElement('a');
-      link.download = 'my-code.png';
-      link.href = image;
-      link.click();
+      // // Download the image
+      // const image = canvas.toDataURL("image/png").replace("image/png", "image/octet-stream");
+      // const link = document.createElement('a');
+      // link.download = 'my-code.png';
+      // link.href = image;
+      // link.click();
       
       // Optional: remove the preview or hide it
       // imagePreview.style.display = 'none';
