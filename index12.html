@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Code Snapshot</title>
+<!-- Include PrismJS for syntax highlighting -->
+<link href="https://cdn.jsdelivr.net/npm/prismjs/themes/prism-okaidia.css" rel="stylesheet"/>
+<script src="https://cdn.jsdelivr.net/npm/prismjs/prism.js"></script>
+<!-- Manually include languages you want to support -->
+<script src="https://cdn.jsdelivr.net/npm/prismjs/components/prism-python.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/prismjs/components/prism-javascript.js"></script>
+<!-- Include html2canvas -->
+<script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+<style>
+    /* Basic styling */
+    body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 20px;
+        background-color: #f7f7f7;
+    }
+    .container {
+        margin-bottom: 20px;
+    }
+    label {
+        display: block;
+        margin-bottom: 5px;
+        font-weight: bold;
+    }
+    #code-input, #language-select, #padding-control, #background-select {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        margin-bottom: 10px;
+    }
+    #code-container {
+        background-color: #2e3440;
+        color: #d8dee9;
+        padding: 20px;
+        border-radius: 8px;
+        overflow: auto;
+    }
+    button {
+        padding: 10px 20px;
+        font-size: 16px;
+        cursor: pointer;
+        display: block;
+        margin-bottom: 10px;
+    }
+</style>
+</head>
+<body>
+
+<div class="container">
+    <label for="code-input">Paste your code here:</label>
+    <textarea id="code-input" oninput="updateCodeBlock()"></textarea>
+    <label for="language-select">Select Language:</label>
+    <select id="language-select" onchange="updateCodeBlock()">
+        <option value="javascript">JavaScript</option>
+        <option value="python">Python</option>
+        <option value="markup">HTML</option>
+    </select>
+</div>
+
+<div class="container">
+    <label for="padding-control">Adjust Padding:</label>
+    <input type="range" id="padding-control" min="0" max="50" value="20" oninput="updatePadding()">
+</div>
+
+<div class="container">
+    <label for="background-select">Select Background:</label>
+    <select id="background-select" onchange="changeBackground()">
+        <option value="#2e3440">Dark Blue</option>
+        <option value="#ffffff">White</option>
+        <option value="#e0e0e0">Grey</option>
+    </select>
+</div>
+
+<div class="container">
+    <label for="code-container">Preview:</label>
+    <div id="code-container">
+        <pre><code id="code-block" class="language-javascript"></code></pre>
+    </div>
+</div>
+
+<button onclick="downloadSnapshot()">Download Snapshot</button>
+<button onclick="copyToClipboard()">Copy to Clipboard</button>
+
+<script>
+function updateCodeBlock() {
+    var codeInput = document.getElementById('code-input').value;
+    var codeBlock = document.getElementById('code-block');
+    var language = document.getElementById('language-select').value;
+    codeBlock.className = 'language-' + language;
+    codeBlock.textContent = codeInput;
+    Prism.highlightAll();
+}
+
+function updatePadding() {
+    var paddingValue = document.getElementById('padding-control').value;
+    document.getElementById('code-container').style.padding = paddingValue + 'px';
+}
+
+function changeBackground() {
+    var backgroundColor = document.getElementById('background-select').value;
+    document.getElementById('code-container').style.backgroundColor = backgroundColor;
+}
+
+function downloadSnapshot() {
+    html2canvas(document.getElementById('code-container')).then(function(canvas) {
+        var dataURL = canvas.toDataURL('image/png');
+        var link = document.createElement('a');
+        link.href = dataURL;
+        link.download = 'code-snapshot.png';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }).catch(function(error) {
+        console.error('html2canvas error:', error);
+    });
+}
+
+function copyToClipboard() {
+    html2canvas(document.getElementById('code-container')).then(function(canvas) {
+        navigator.clipboard.writeText(canvas.toDataURL('image/png')).then(function() {
+            alert('Image copied to clipboard as Data URL!');
+        }, function(error) {
+            console.error('Unable to copy to clipboard:', error);
+        });
+    });
+}
+
+window.onload = function() {
+    updateCodeBlock();
+    updatePadding();
+    changeBackground();
+};
+</script>
+</body>
+</html>
