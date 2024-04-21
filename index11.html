@@ -96,7 +96,6 @@ function updateCodeBlock() {
     codeBlock.textContent = codeInput;
     Prism.highlightAll();
 }
-
 function downloadSnapshot() {
     var container = document.getElementById('code-container');
     if (!container) {
@@ -104,37 +103,42 @@ function downloadSnapshot() {
         return;
     }
 
-    if (container.offsetWidth === 0 || container.offsetHeight === 0) {
+    var style = window.getComputedStyle(container);
+    var containerWidth = parseInt(style.getPropertyValue('width'), 10);
+    var containerHeight = parseInt(style.getPropertyValue('height'), 10);
+
+    if (containerWidth === 0 || containerHeight === 0) {
         console.error('The container has zero dimensions. It may be hidden or not displayed.');
         return;
     }
 
-    // Adding a short delay to ensure everything is rendered correctly
-    setTimeout(() => {
-        html2canvas(container, { logging: true, useCORS: true }).then(function(canvas) {
-            if (!canvas) {
-                console.error('Failed to create a canvas element.');
-                return;
-            }
+    html2canvas(container, {
+        logging: true,
+        useCORS: true,
+        width: containerWidth,
+        height: containerHeight,
+    }).then(function(canvas) {
+        if (!canvas) {
+            console.error('Failed to create a canvas element.');
+            return;
+        }
 
-            var dataURL = canvas.toDataURL('image/png');
-            if (dataURL === 'data:,') {
-                console.error('Data URL is empty. Canvas might be empty or not properly rendered.');
-                return;
-            }
+        var dataURL = canvas.toDataURL('image/png');
+        if (dataURL === 'data:,') {
+            console.error('Data URL is empty. Canvas might be empty or not properly rendered.');
+            return;
+        }
 
-            var link = document.createElement('a');
-            link.href = dataURL;
-            link.download = 'code-snapshot.png';
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-        }).catch(function(error) {
-            console.error('html2canvas error:', error);
-        });
-    }, 500); // Adjust delay as necessary
+        var link = document.createElement('a');
+        link.href = dataURL;
+        link.download = 'code-snapshot.png';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }).catch(function(error) {
+        console.error('html2canvas error:', error);
+    });
 }
-
 
 function copyToClipboard() {
     html2canvas(document.getElementById('code-container')).then(function(canvas) {
